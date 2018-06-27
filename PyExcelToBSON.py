@@ -1,15 +1,18 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import argparse
 
 import bson
 import json
+import os
 
 from xlrd import open_workbook
 
 def set_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--input", help="path of excel file", required=True)
+    parser.add_argument("-d", "--debug", help="export to json file", action="store_true")
     args = parser.parse_args()
     if not args.input:
         print("PARSER ERROR] arguments is wrong!")
@@ -19,25 +22,28 @@ def set_parser():
 
 args = set_parser()
 wb = open_workbook(args.input)
-for sheet in wb.sheets():
-    print(sheet.name)
+if not os.path.exists("output"):
+    os.mkdir("output")
 
+for sheet in wb.sheets():
     if sheet.name[0] == '_':
         print("INFO] skipped sheet - " + sheet.name)
         continue
 
-    with open(sheet.name + '.bson', 'wb') as bson_file:
-        json_dict = {}
+    json_dict = {}
+    print("INFO] start convert sheet - {}".format(sheet.name))
+    with open("./output/{}.bson".format(sheet.name), 'wb') as bson_file:
         data_list = []
         key_list = []
 
         for i in range(sheet.nrows):
-            #print("{} 번째".format(i))
+            # NOTE(jjo): 규칙에 의거하여 스킵 
             if i < 4:
                 continue
 
             row = sheet.row(i)
 
+            # NOTE(jjo): column name 수집 
             if i == 4:
                 for col in row:
                     key_list.append(col.value)
@@ -46,7 +52,7 @@ for sheet in wb.sheets():
             key_index = 0
             data_dict = {}
             for col in row:
-                data_dict[key_list[key_index]] = col.value
+                data_dict[key_list[key_index]] = str(col.value)
                 key_index = key_index + 1
 
             data_list.append(data_dict)
@@ -54,6 +60,12 @@ for sheet in wb.sheets():
         json_dict['data'] = data_list
 
         bson_file.write(bson.dumps(json_dict))
+
+    if args.debug:
+        with open("./output/{}.json".format(sheet.name), 'w') as json_file:
+            json.dump(json_dict, json_file)
+
+    print("INFO] end convert process - {}".format(sheet.name))
 
     # NOTE(jjo): for test
     #with open(sheet.name + '.bson', 'rb') as bson_f:
