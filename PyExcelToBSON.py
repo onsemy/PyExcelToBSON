@@ -6,6 +6,7 @@ import argparse
 import bson
 import json
 import os
+import shutil
 
 from xlrd import open_workbook
 
@@ -13,6 +14,7 @@ def set_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--input", help="path of excel file", required=True)
     parser.add_argument("-d", "--debug", help="export to json file", action="store_true")
+    parser.add_argument("-c", "--clean", help="clean up output", action="store_true")
     args = parser.parse_args()
     if not args.input:
         print("PARSER ERROR] arguments is wrong!")
@@ -22,7 +24,12 @@ def set_parser():
 
 args = set_parser()
 wb = open_workbook(args.input)
-if not os.path.exists("output"):
+
+if os.path.exists("output"):
+    if args.clean:
+        shutil.rmtree("output", ignore_errors=True)
+        os.mkdir("output")
+else:
     os.mkdir("output")
 
 for sheet in wb.sheets():
