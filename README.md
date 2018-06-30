@@ -54,6 +54,7 @@
 
 - ```-i```, ```--input```: Excel(xlsx) 경로와 파일 이름
 - ```-d```, ```--debug```: JSON 파일로 Export
+- ```-c```, ```--clean```: `output`폴더 정리
 
 3. `output`폴더에 나온 결과물을 확인한다.
 

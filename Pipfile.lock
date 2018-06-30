@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "358ca66f63f83dd8b23c8fe4f584c9d122d1bf8b99496fa4d441eaaf36aa99f8"
+            "sha256": "93c1c6320d79fc206e72d860bc129ac4610114580c452756f2ee821a751455db"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -53,14 +53,6 @@
                 "sha256:fc9b582dba0366e63540982c3944a9230cbc6f303641c51483fa547dcc22393a"
             ],
             "version": "==1.6.5"
-        },
-        "colorama": {
-            "hashes": [
-                "sha256:463f8483208e921368c9f306094eb6f725c6ca42b0f97e313cb5d5512459feda",
-                "sha256:48eb22f4f8461b1df5734a074b57042430fb06e1d61bd1e11b078c0fe6d7a1f1"
-            ],
-            "markers": "sys_platform == 'win32'",
-            "version": "==0.3.9"
         },
         "isort": {
             "hashes": [
