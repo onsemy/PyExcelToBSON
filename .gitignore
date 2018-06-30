@@ -194,3 +194,4 @@ $RECYCLE.BIN/
 
 *.bson
 output/
+Pipfile.lock
