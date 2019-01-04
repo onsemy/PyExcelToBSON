@@ -70,7 +70,7 @@ for sheet in wb.sheets():
 
     if args.debug:
         with open("./output/{}.json".format(sheet.name), 'w') as json_file:
-            json.dump(json_dict, json_file)
+            json.dump(json_dict, json_file, indent=4, sort_keys=True)
 
     print("INFO] end convert process - {}".format(sheet.name))
 
