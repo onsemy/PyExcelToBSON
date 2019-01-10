@@ -8,7 +8,7 @@ import json
 import os
 import shutil
 
-from xlrd import open_workbook
+from openpyxl import load_workbook
 
 def set_parser():
     parser = argparse.ArgumentParser()
@@ -23,7 +23,7 @@ def set_parser():
     return args
 
 args = set_parser()
-wb = open_workbook(args.input)
+wb = load_workbook(filename=args.input, data_only=True)
 
 if os.path.exists("output"):
     if args.clean:
@@ -32,34 +32,41 @@ if os.path.exists("output"):
 else:
     os.mkdir("output")
 
-for sheet in wb.sheets():
-    if sheet.name[0] == '_':
-        print("INFO] skipped sheet - " + sheet.name)
+for sheet in wb:
+    if sheet.title[0] == '_':
+        print("INFO] skipped sheet - " + sheet.title)
         continue
 
     json_dict = {}
-    print("INFO] start convert sheet - {}".format(sheet.name))
-    with open("./output/{}.bson".format(sheet.name), 'wb') as bson_file:
+    print("INFO] start convert sheet - {}".format(sheet.title))
+    with open("./output/{}.bson".format(sheet.title), mode='wb') as bson_file:
         data_list = []
         key_list = []
 
-        for i in range(sheet.nrows):
-            # NOTE(jjo): 규칙에 의거하여 스킵 
-            if i < 4:
+        rowIndex = -1
+
+        for row in sheet:
+            colIndex = 0
+
+            rowIndex = rowIndex + 1
+
+            if rowIndex < 4:
                 continue
-
-            row = sheet.row(i)
-
-            # NOTE(jjo): column name 수집 
-            if i == 4:
+            
+            if rowIndex == 4:
                 for col in row:
-                    key_list.append(col.value)
+                    if col.value is None:
+                        break
+                    key_list.append(str(col.value))
                 continue
 
             key_index = 0
             data_dict = {}
+
             for col in row:
-                data_dict[key_list[key_index]] = str(col.value)
+                if col.value is None:
+                    break
+                data_dict[key_list[key_index]] = col.value
                 key_index = key_index + 1
 
             data_list.append(data_dict)
@@ -69,10 +76,10 @@ for sheet in wb.sheets():
         bson_file.write(bson.dumps(json_dict))
 
     if args.debug:
-        with open("./output/{}.json".format(sheet.name), 'w') as json_file:
-            json.dump(json_dict, json_file, indent=4, sort_keys=True)
+        with open("./output/{}.json".format(sheet.title), mode='w', encoding='utf-8') as json_file:
+            json.dump(json_dict, json_file, indent=4, sort_keys=True, ensure_ascii=False)
 
-    print("INFO] end convert process - {}".format(sheet.name))
+    print("INFO] end convert process - {}".format(sheet.title))
 
     # NOTE(jjo): for test
     #with open(sheet.name + '.bson', 'rb') as bson_f:
