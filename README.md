@@ -16,7 +16,7 @@
 
 - [`python3.7`](https://www.python.org/downloads/): PyExcelToBSON은 *Python 3*를 기반으로 만들어집니다.
 - [`virtualenv`](https://virtualenv.pypa.io/en/stable/): 독립적인 개발 환경을 지원합니다.
-- [`xlrd`](https://github.com/python-excel/xlrd): Excel을 다루기 위해서 필요합니다.
+- [`openpyxl`](https://openpyxl.readthedocs.io/en/stable/): Excel을 다루기 위해서 필요합니다.
 - [`bson`](https://github.com/py-bson/bson): BSON을 다루기 위해서 필요합니다.
 
 ## 어떻게 개발하나요?
