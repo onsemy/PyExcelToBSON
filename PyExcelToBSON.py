@@ -75,7 +75,8 @@ for sheet in wb:
                 data_dict[key_list[key_index]] = col.value
                 key_index = key_index + 1
 
-            data_list.append(data_dict)
+            if key_index > 0:
+                data_list.append(data_dict)
 
         json_dict['data'] = data_list
 
