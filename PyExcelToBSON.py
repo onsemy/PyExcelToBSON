@@ -14,6 +14,8 @@ def set_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--input", help="path of excel file", required=True)
     parser.add_argument("-d", "--debug", help="export to json file", action="store_true")
+    parser.add_argument("-o", "--output", help="path of output directory", required=True)
+    parser.add_argument("-s", "--suffix", help="suffix of output file", required=False)
     parser.add_argument("-c", "--clean", help="clean up output", action="store_true")
     args = parser.parse_args()
     if not args.input:
@@ -25,12 +27,16 @@ def set_parser():
 args = set_parser()
 wb = load_workbook(filename=args.input, data_only=True)
 
-if os.path.exists("output"):
+if os.path.exists(args.output):
     if args.clean:
-        shutil.rmtree("output", ignore_errors=True)
-        os.mkdir("output")
+        shutil.rmtree(args.output, ignore_errors=True)
+        os.mkdir(args.output)
 else:
-    os.mkdir("output")
+    os.mkdir(args.output)
+
+suffix = ''
+if args.suffix is not None:
+    suffix = args.suffix
 
 for sheet in wb:
     if sheet.title[0] == '_':
@@ -39,7 +45,7 @@ for sheet in wb:
 
     json_dict = {}
     print("INFO] start convert sheet - {}".format(sheet.title))
-    with open("./output/{}.bson".format(sheet.title), mode='wb') as bson_file:
+    with open("{}/{}{}.bson".format(args.output, sheet.title, suffix), mode='wb') as bson_file:
         data_list = []
         key_list = []
 
@@ -76,7 +82,7 @@ for sheet in wb:
         bson_file.write(bson.dumps(json_dict))
 
     if args.debug:
-        with open("./output/{}.json".format(sheet.title), mode='w', encoding='utf-8') as json_file:
+        with open("{}/{}{}.json".format(args.output, sheet.title, suffix), mode='w', encoding='utf-8') as json_file:
             json.dump(json_dict, json_file, indent=4, sort_keys=True, ensure_ascii=False)
 
     print("INFO] end convert process - {}".format(sheet.title))
