@@ -67,11 +67,24 @@ for sheet in wb:
                 continue
 
             key_index = 0
+            key_list_len = len(key_list)
             data_dict = {}
 
             for col in row:
-                if col.value is None:
+                if key_list_len <= key_index:
                     break
+
+                if key_index == 0 and col.value is None:
+                    break
+
+                if col.value is None:
+                    formula = col.TYPE_FORMULA_CACHE_STRING
+                    if formula == 'int':
+                        col.value = 0
+                    elif formula == 'float':
+                        col.value = 0.0
+                    else:
+                        col.value = ''
                 data_dict[key_list[key_index]] = col.value
                 key_index = key_index + 1
 
