@@ -59,7 +59,7 @@ Mac | `source venv/bin/activate` | `deactivate`
 
 ### 사용법
 
-```$ PyExcelToBSON.py -i sample.xlsx```
+```$ PyExcelToBSON.py -i sample.xlsx -o ./output```
 
 1. ```sample.xlsx```와 같은 형식의 Excel(xlsx) 파일을 준비합니다. (Sample이 Repository에 포함되어 있음)
 
