@@ -1,16 +1,16 @@
 # PyExcelToBSON
 
-단일 `Excel(xlsx) File`에 대하여 `Sheet`별로 `BSON(Binary JSON)`으로 변환하는 Python Script
+*단일 Excel(xlsx) File*에 대하여 *Sheet*별로 **BSON(Binary JSON)** 으로 변환하는 Python Script
 
 ## 이것은 무엇인가요?
 
-개인적인 프로젝트에 쓰기 위한 스크립트입니다. 어떠한 환경에서도 돌아가게 하기 위해 만들었다.
+개인적인 프로젝트에 쓰기 위한 스크립트입니다. 어떠한 환경에서도 돌아가게 하기 위해 만들었습니다.
 
-```Excel```에 미리 정의된 Data Model을 ```BSON```으로 생성해준다.
+*Excel*에 미리 정의된 Data Model을 **BSON**으로 생성해줍니다.
 
 ## 어떤 일을 하나요?
 
-단일 `Excel(xlsx) File`에 대하여 `Sheet`별로 `BSON(Binary JSON)`으로 변환합니다.
+단일 *Excel(xlsx) File*에 대하여 *Sheet*별로 **BSON(Binary JSON)** 으로 변환합니다.
 
 ## 무엇이 필요한가요?
 
