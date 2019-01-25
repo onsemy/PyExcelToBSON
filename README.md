@@ -66,8 +66,10 @@ Mac | `source venv/bin/activate` | `deactivate`
 2. 적절한 인자 값을 넣고 ```PyExcelToBSON.py```을 실행합니다. 인자를 넣는 순서는 상관없습니다.
 
 - ```-i```, ```--input```: Excel(xlsx) 경로와 파일 이름. **실행 시 반드시 입력해야 합니다.**
+- ```-o```, ```--output```: 결과가 출력될 폴더 경로. **실행 시 반드시 입력해야 합니다.**
 - ```-d```, ```--debug```: JSON 파일로 Export
 - ```-c```, ```--clean```: `output`폴더 정리
+- ```-s```, ```--suffix```: 결과물의 접미사
 
 3. `output`폴더에 나온 결과물을 확인합니다.
 
