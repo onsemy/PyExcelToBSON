@@ -46,7 +46,7 @@ class ExcelReader(InputReader):
     def read_sheets(self):
         for sheet in self.workbook:
             if sheet.title.startswith(SKIP_SHEET_PREFIX):
-                print(f"[INFO] Skipped: {sheet.title}")
+                print(f"[INFO] Skip: {sheet.title}")
                 continue
 
             yield sheet.title, self._parse_sheet(sheet)

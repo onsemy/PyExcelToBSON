@@ -1,85 +1,93 @@
 # PyExcelToBSON
 
-*단일 Excel(xlsx) File*에 대하여 *Sheet*별로 **BSON(Binary JSON)** 으로 변환하는 Python Script
+> 🇰🇷 [한국어 문서](README.ko.md)
 
-## 이것은 무엇인가요?
+A CLI tool that converts each sheet of an Excel (`.xlsx`) file into a **BSON (Binary JSON)** file.
 
-개인적인 프로젝트에 쓰기 위한 스크립트입니다. 어떠한 환경에서도 돌아가게 하기 위해 만들었습니다.
+## Requirements
 
-*Excel*에 미리 정의된 Data Model을 **BSON**으로 생성해줍니다.
+- Python `>= 3.10`
+- [`openpyxl`](https://openpyxl.readthedocs.io/en/stable/): For reading Excel files
+- [`pymongo`](https://pymongo.readthedocs.io/): For BSON serialization (includes `bson` module)
 
-## 어떤 일을 하나요?
+## Installation
 
-단일 *Excel(xlsx) File*에 대하여 *Sheet*별로 **BSON(Binary JSON)** 으로 변환합니다.
+```bash
+pip install pyexcel2bson
+```
 
-## 무엇이 필요한가요?
+## Usage
 
-- [`python3.7`](https://www.python.org/downloads/): PyExcelToBSON은 *Python 3*를 기반으로 만들어집니다.
-- [`virtualenv`](https://virtualenv.pypa.io/en/stable/): 독립적인 개발 환경을 지원합니다.
-- [`openpyxl`](https://openpyxl.readthedocs.io/en/stable/): Excel을 다루기 위해서 필요합니다.
-- [`bson`](https://github.com/py-bson/bson): BSON을 다루기 위해서 필요합니다.
+```bash
+pyexcel2bson -i sample.xlsx -o ./output
+```
 
-## 어떻게 개발하나요?
+### Arguments
 
-1. *python 3.7*을 설치합니다. Windows에서 설치 시, Add to PATH를 활성화하여 설치합니다.
-2. `git clone https://github.com/onsemy/PyExcelToBSON.git` 또는 `git clone git@github.com:onsemy/PyExcelToBSON.git`으로 Project를 내려 받습니다.
-3. `pip install virtualenv`로 `virtualenv`를 설치합니다.
-4. `PyExcelToBSON` Directory로 이동하여 Project에 대한 가상 환경을 구축합니다.
-  > Windows의 경우 `virtualenv venv`를 실행합니다.
-  > Mac의 경우 `virtualenv -p python3 venv`를 실행합니다.
-5. 가상 환경을 실행합니다.
+| Argument | Description | Required |
+|---|---|---|
+| `-i`, `--input` | Path to the Excel (`.xlsx`) file | ✅ |
+| `-o`, `--output` | Path to the output directory | ✅ |
+| `-s`, `--suffix` | Suffix appended to output filenames | ❌ |
+| `-d`, `--debug` | Also export as JSON for debugging | ❌ |
+| `-c`, `--clean` | Clean up the output directory before converting | ❌ |
 
- OS | 활성화 | 비활성화 
----|-------|-------
-Windows | `\venv\Scripts\activate.bat` | `deactivate.bat`
-Mac | `source venv/bin/activate` | `deactivate`
+### Excel Sheet Rules
 
-6. `pip install -r requirements.txt`로 의존성 Package를 가상 환경에 구축합니다.
-7. 개발을 시작합니다.
+1. Sheets whose name starts with `_` are skipped.
+   - e.g. `_info`
 
-## 어떻게 사용하나요?
+2. Rows 1–5 must follow this structure:
 
-### Excel Sheet 규칙
+| Row | Description |
+|---|---|
+| 1 | Column description |
+| 2 | Column usage (reserved) |
+| 3 | Column attribute |
+| 4 | Column data type |
+| 5 | Column name (variable name) |
 
-1. `Sheet` 이름의 맨 앞 글자에 ```_```가 들어가는 경우 BSON으로 내보내지지 않습니다.
+3. Data cells must not be empty.
 
-- 예) ```_info```
+### Output Format
 
-2. Sheet에서 1~5번행은 항상 아래와 같이 지켜져야 합니다.
+Each sheet is exported as a `.bson` file with the following structure:
 
-> 2번의 경우에는 [`PyExcelToMustache`](https://github.com/onsemy/PyExcelToMustache)에 필요한 규칙이므로 그대로 따라간다.
+```json
+{
+  "data": [
+    { "column_name": value, ... },
+    ...
+  ]
+}
+```
 
-- 1번행: 해당 열에 대한 설명
-- 2번행: 해당 열의 용도 (사용되지 않을 예정)
-- 3번행: 해당 열의 Attribute
-- 4번행: 해당 열의 Data Type
-- 5번행: 해당 열의 이름 (변수명)
+## Development
 
-3. 내부 데이터 값은 비어있지 않아야 합니다.
+```bash
+git clone https://github.com/onsemy/PyExcelToBSON.git
+cd PyExcelToBSON
+pip install -e ".[dev]"
+```
 
-### 사용법
+## Project Structure
 
-```$ PyExcelToBSON.py -i sample.xlsx -o ./output```
+```
+PyExcelToBSON/
+├── main.py
+├── output_manager.py
+├── readers/
+│   ├── input_reader.py    # Abstract base class
+│   └── excel_reader.py
+├── writers/
+│   ├── output_writer.py   # Abstract base class
+│   ├── bson_writer.py
+│   └── json_writer.py
+└── factories/
+    ├── reader_factory.py
+    └── writer_factory.py
+```
 
-1. ```sample.xlsx```와 같은 형식의 Excel(xlsx) 파일을 준비합니다. (Sample이 Repository에 포함되어 있음)
+## Contributing
 
-2. 적절한 인자 값을 넣고 ```PyExcelToBSON.py```을 실행합니다. 인자를 넣는 순서는 상관없습니다.
-
-- ```-i```, ```--input```: Excel(xlsx) 경로와 파일 이름. **실행 시 반드시 입력해야 합니다.**
-- ```-o```, ```--output```: 결과가 출력될 폴더 경로. **실행 시 반드시 입력해야 합니다.**
-- ```-d```, ```--debug```: JSON 파일로 Export
-- ```-c```, ```--clean```: `output`폴더 정리
-- ```-s```, ```--suffix```: 결과물의 접미사
-
-3. `output`폴더에 나온 결과물을 확인합니다.
-
-> 결과물은 `data`에 배열로 들어가는 형태로 구성되어 있습니다.
-
-## 남은 일은 무엇인가요?
-
-- 코드 리펙토링
-- (가능하면) Google Sheet 연동
-
-## 기여 또는 문의 사항
-
-[`Issue Board`](https://github.com/Game-Pocket/Friday/issues) 혹은 [`email`](mailto:onsemy@gmail.com)로 문의해주세요!
+Please open an [Issue](https://github.com/onsemy/PyExcelToBSON/issues) or send an [email](mailto:onsemy@gmail.com).
