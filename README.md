@@ -8,7 +8,7 @@ A CLI tool that converts each sheet of an Excel (`.xlsx`) file into a **BSON (Bi
 
 - Python `>= 3.6`
 - [`openpyxl`](https://openpyxl.readthedocs.io/en/stable/): For reading Excel files
-- [`pymongo`](https://pymongo.readthedocs.io/): For BSON serialization (includes `bson` module)
+- [`bson`](https://github.com/py-bson/bson): For BSON serialization
 
 ## Installation
 

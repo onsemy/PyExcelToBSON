@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pyexcel2bson"
-version = "0.1.8"
+version = "0.1.9"
 description = "A CLI tool that converts each sheet of an Excel (`.xlsx`) file into a BSON (Binary JSON) file."
 requires-python = ">=3.6"
 dependencies = [
