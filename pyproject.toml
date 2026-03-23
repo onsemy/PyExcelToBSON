@@ -4,14 +4,14 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pyexcel2bson"
-version = "0.1.1"
-description = "Excel 파일을 시트별 BSON 파일로 변환하는 CLI 도구"
-requires-python = ">=3.10"
+version = "0.1.8"
+description = "A CLI tool that converts each sheet of an Excel (`.xlsx`) file into a BSON (Binary JSON) file."
+requires-python = ">=3.6"
 dependencies = [
     "openpyxl>=3.0.0",
-    "pymongo>=4.0.0",   # bson 모듈 포함
+    "bson>=0.5.7",
 ]
 readme = "README.md"
 
 [project.scripts]
-py-excel-to-bson = "PyExcelToBSON.main:main"
+pyexcel2bson = "pyexcel2bson.main:main"

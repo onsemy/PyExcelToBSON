@@ -3,9 +3,9 @@
 
 import argparse
 
-from writers.bson_writer import BsonWriter
-from writers.json_writer import JsonWriter
-from writers.output_writer import OutputWriter
+from pyexcel2bson.writers.bson_writer import BsonWriter
+from pyexcel2bson.writers.json_writer import JsonWriter
+from pyexcel2bson.writers.output_writer import OutputWriter
 
 
 class WriterFactory:

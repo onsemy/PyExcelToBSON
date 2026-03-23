@@ -4,8 +4,8 @@
 import argparse
 import os
 
-from readers.excel_reader import ExcelReader
-from readers.input_reader import InputReader
+from pyexcel2bson.readers.excel_reader import ExcelReader
+from pyexcel2bson.readers.input_reader import InputReader
 
 
 _READER_MAP: dict[str, type[InputReader]] = {

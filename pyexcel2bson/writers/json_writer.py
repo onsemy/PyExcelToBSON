@@ -3,7 +3,7 @@
 
 import json
 
-from writers.output_writer import OutputWriter
+from pyexcel2bson.writers.output_writer import OutputWriter
 
 
 class JsonWriter(OutputWriter):

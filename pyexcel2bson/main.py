@@ -7,9 +7,9 @@ PyExcelToBSON - Excel 파일을 BSON 파일로 변환하는 CLI 도구
 
 import argparse
 
-from factories.reader_factory import ReaderFactory
-from factories.writer_factory import WriterFactory
-from output_manager import OutputManager
+from pyexcel2bson.factories.reader_factory import ReaderFactory
+from pyexcel2bson.factories.writer_factory import WriterFactory
+from pyexcel2bson.output_manager import OutputManager
     
 
 def build_parser() -> argparse.Namespace:

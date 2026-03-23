@@ -4,12 +4,13 @@
 # NOTE(JJO): Const
 from openpyxl import load_workbook
 
-from readers.input_reader import InputReader
+from pyexcel2bson.readers.input_reader import InputReader
 
 
 SKIP_ROW_COUNT = 4
 KEY_ROW_INDEX = 4
 SKIP_SHEET_PREFIX = '_'
+DATA_TYPE_ROW_INDEX = 3
 
 
 class DataConverter:
@@ -20,22 +21,21 @@ class DataConverter:
     }
 
     @staticmethod
-    def resolve_cell_value(cell) -> object:
+    def resolve_cell_value(cell, data_type: str) -> object:
         if cell.value is not None:
             return cell.value
-
-        formula = cell.TYPE_FORMULA_CACHE_STRING
-        return DataConverter.DEFAULT_VALUES.get(formula, '')
+        return DataConverter.DEFAULT_VALUES.get(data_type, '')
     
     @staticmethod
-    def parse_row(row, key_list: list) -> dict | None:
+    def parse_row(row, key_list: list, type_list: list) -> dict | None:
         data = {}
         for index, cell in enumerate(row):
             if index >= len(key_list):
                 break
             if 0 == index and cell.value is None:
                 return None
-            data[key_list[index]] = DataConverter.resolve_cell_value(cell)
+            data_type = type_list[index] if index < len(type_list) else ''
+            data[key_list[index]] = DataConverter.resolve_cell_value(cell, data_type)
         return data if data else None
     
 
@@ -55,6 +55,7 @@ class ExcelReader(InputReader):
     def _parse_sheet(sheet) -> dict:
         key_list = []
         data_list = []
+        type_list = []
 
         for row_index, row in enumerate(sheet):
             if row_index < SKIP_ROW_COUNT:
@@ -64,7 +65,11 @@ class ExcelReader(InputReader):
                 key_list = ExcelReader._extract_keys(row)
                 continue
 
-            parsed = DataConverter.parse_row(row, key_list)
+            if row_index == DATA_TYPE_ROW_INDEX:
+                type_list = ExcelReader._extract_keys(row)
+                continue
+
+            parsed = DataConverter.parse_row(row, key_list, type_list)
             if parsed is not None:
                 data_list.append(parsed)
 
